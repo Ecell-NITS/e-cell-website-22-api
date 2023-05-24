@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const UserModel = require("./Users");
+const UserModel2 = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 app.use(bodyParser.json());
@@ -37,7 +38,6 @@ const sendEmail = (to, subject, text) => {
   });
 };
 
-
 app.post("/check-email", (req, res) => {
   const email = req.body.email;
   UserModel.findOne({ email }, (err, user) => {
@@ -58,8 +58,19 @@ app.post("/createUser", async (req, res) => {
   const newUser = new UserModel(user);
   await newUser.save();
   const email = user.email;
-  const subject = "Subscribed for Ecell NITS newsletter.🥳"
-  const text = `Thanks for subscribing to ECell Newsletter. We relase monthly newsletter which are highly curated for entrepreneur like minded people.\n\nDon't forget to check your spam folder.`;
+  const subject = "Subscribed for Ecell NITS newsletter.🥳";
+  const text = `Thank you for subscribing to the Ecell newsletter! Get ready to dive into a world of entrepreneurial inspiration, valuable resources, and exciting updates. We can't wait to share our knowledge and support your entrepreneurial journey. Stay tuned for our first newsletter, packed with valuable content to help you thrive\n\nDon't forget to check your spam folder.`;
+  sendEmail(email, subject, text);
+  res.json(user);
+});
+
+app.post("/sendquery", async (req, res) => {
+  const user = req.body;
+  const newUser = new UserModel2(user);
+  await newUser.save();
+  const email = user.email;
+  const subject = "Your query submitted🥳";
+  const text = `Thanks for reaching out to ecell.`;
   sendEmail(email, subject, text);
   res.json(user);
 });
