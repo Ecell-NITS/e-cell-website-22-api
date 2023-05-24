@@ -26,7 +26,8 @@ const UserSchema2 = new mongoose.Schema({
 });
 
 const UserModel = mongoose.model("newsletter", UserSchema);
-module.exports = UserModel;
-
 const UserModel2 = mongoose.model("query", UserSchema2);
-module.exports = UserModel2;
+module.exports = {
+    UserModel,
+    UserModel2,
+  };

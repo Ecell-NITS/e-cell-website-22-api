@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const UserModel = require("./Users");
-const UserModel2 = require("./Users");
+const { UserModel, UserModel2 } = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 app.use(bodyParser.json());
@@ -59,7 +58,7 @@ app.post("/createUser", async (req, res) => {
   await newUser.save();
   const email = user.email;
   const subject = "Subscribed for Ecell NITS newsletter.🥳";
-  const text = `Thank you for subscribing to the Ecell newsletter! Get ready to dive into a world of entrepreneurial inspiration, valuable resources, and exciting updates. We can't wait to share our knowledge and support your entrepreneurial journey. Stay tuned for our first newsletter, packed with valuable content to help you thrive\n\nDon't forget to check your spam folder.`;
+  const text = `Thank you for subscribing to the Ecell newsletter! Get ready to dive into a world of entrepreneurial inspiration, valuable resources, and exciting updates. We can't wait to share our knowledge and support your entrepreneurial journey. Stay tuned for our first newsletter, packed with valuable content to help you thrive.\n\nDon't forget to check your spam folder.`;
   sendEmail(email, subject, text);
   res.json(user);
 });
