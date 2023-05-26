@@ -69,7 +69,7 @@ app.post("/sendquery", async (req, res) => {
   await newUser.save();
   const email = user.email;
   const subject = "Your Sent Us a Message";
-  const text = `Hey there! You sent:\n\n\n\n>${user.message}\n\n\n\nWe'll get back to you as soon as we can! Hopefully with a useful answer.\n\n\n\nThanks,\nThe NITS ECELL Technical Team.`;
+  const text = `Hey there! You sent:\n\n>${user.message}\n\nWe'll get back to you as soon as we can! Hopefully with a useful answer.\n\nThanks,\nThe NITS ECELL Technical Team.`;
   sendEmail(email, subject, text);
   res.json(user);
 });
