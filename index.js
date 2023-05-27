@@ -47,6 +47,21 @@ app.get("/getUsers", (req, res) => {
   });
 });
 
+app.get("/getnewsletters", (req, res) => {
+  UserModel.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+app.get("/", (req, res) => {
+  res.send("<p>Welcome to ecell website api.</p>");
+});
+
+
 app.post("/check-email", (req, res) => {
   const email = req.body.email;
   UserModel.findOne({ email }, (err, user) => {
