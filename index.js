@@ -37,6 +37,16 @@ const sendEmail = (to, subject, text) => {
   });
 };
 
+app.get("/getUsers", (req, res) => {
+  UserModel2.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 app.post("/check-email", (req, res) => {
   const email = req.body.email;
   UserModel.findOne({ email }, (err, user) => {
