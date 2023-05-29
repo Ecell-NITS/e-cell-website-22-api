@@ -15,14 +15,14 @@ mongoose.connect(process.env.MONGODBSECRET);
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PWD,
+    user: process.env.EMAIL_ECELL,
+    pass: process.env.EMAIL_PWD_ECELL,
   },
 });
 
 const sendEmail = (to, subject, text) => {
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: process.env.EMAIL_ECELL,
     to: to,
     subject: subject,
     text: text,
@@ -83,7 +83,7 @@ app.post("/createUser", async (req, res) => {
   await newUser.save();
   const email = user.email;
   const subject = "Subscribed for Ecell NITS newsletter.🥳";
-  const text = `Thank you for subscribing to the Ecell newsletter! Get ready to dive into a world of entrepreneurial inspiration, valuable resources, and exciting updates. We can't wait to share our knowledge and support your entrepreneurial journey. Stay tuned for our first newsletter, packed with valuable content to help you thrive.\n\nDon't forget to check your spam folder.`;
+  const text = `Thank you for subscribing to the Ecell newsletter! Get ready to dive into a world of entrepreneurial inspiration, valuable resources, and exciting updates. We can't wait to share our knowledge and support your entrepreneurial journey. Stay tuned for our first newsletter, packed with valuable content to help you thrive.\n\nDon't forget to check your spam folder.\n\nBest regards,\n\nE-Cell,\nNational Institute of Technology, Silchar`;
   sendEmail(email, subject, text);
   res.json(user);
 });
