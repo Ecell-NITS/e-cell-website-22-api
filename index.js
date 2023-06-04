@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { UserModel, UserModel2 } = require("./Users");
+const { UserModel, UserModel2, blogs1 } = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 app.use(bodyParser.json());
@@ -99,7 +99,35 @@ app.post("/sendquery", async (req, res) => {
   res.json(user);
 });
 
-const port = process.env.PORT || 3001;
+app.post("/createblog", async (req, res) => {
+  const user = req.body;
+  const newUser = new blogs1(user);
+  await newUser.save();
+  res.json(user);
+});
+
+app.get("/getblogs", (req, res) => {
+  blogs1.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+app.get('/getblogs/:id', async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const blog = await blogs1.findById(blogId);
+    res.json(blog);
+  } catch (error) {
+    console.log('Error fetching blog:', error);
+    res.status(500).json({ error: 'Error fetching blog' });
+  }
+});
+
+const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
   console.log("server started.");
 });
