@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { UserModel, UserModel2, blogs1 } = require("./Users");
+const { UserModel, UserModel2, blogs1,PublishedBlog } = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 app.use(bodyParser.json());
@@ -125,6 +125,35 @@ app.get('/getblogs/:id', async (req, res) => {
     console.log('Error fetching blog:', error);
     res.status(500).json({ error: 'Error fetching blog' });
   }
+});
+
+app.post("/acceptedblogs", async (req, res) => {
+  const { blogId } = req.body
+
+  try {
+    const blog = await blogs1.findById(blogId)
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+    blog.status = "published";
+    await blog.save();
+    const publishedBlog = new PublishedBlog(blog.toObject());
+    await publishedBlog.save();
+    res.status(200).json({ message: "Blog published successfully" });
+  } catch (error) {
+    console.log("Error storing published blog:", error);
+    res.status(500).json({ error: "Error storing published blog" });
+  }
+})
+
+app.get("/acceptedblogs", (req, res) => {
+  PublishedBlog.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(result);
+    }
+  });
 });
 
 const port = process.env.PORT || 2226;

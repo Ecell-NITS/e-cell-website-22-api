@@ -65,11 +65,19 @@ const blogsschema = new mongoose.Schema({
   timestamp:Date
 });
 
+const blogs1 = mongoose.model("blog", blogsschema);
+const PublishedBlogSchema = new mongoose.Schema(
+  blogs1.schema.obj, 
+  { collection: "publishedblogs" } 
+);
+
 const UserModel = mongoose.model("newsletter", UserSchema);
 const UserModel2 = mongoose.model("query", UserSchema2);
-const blogs1 = mongoose.model("blog", blogsschema);
+
+const PublishedBlog = mongoose.model("PublishedBlog", PublishedBlogSchema);
 module.exports = {
   UserModel,
   UserModel2,
-  blogs1
+  blogs1,
+  PublishedBlog,
 };
