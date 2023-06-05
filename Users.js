@@ -54,6 +54,10 @@ const blogsschema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  writeremail:{
+    type: String,
+    required: true,
+  },
   writerintro:{
     type: String,
     required: true,

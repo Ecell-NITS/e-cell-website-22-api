@@ -139,6 +139,14 @@ app.post("/acceptedblogs", async (req, res) => {
     await blog.save();
     const publishedBlog = new PublishedBlog(blog.toObject());
     await publishedBlog.save();
+
+    console.log(blog.writeremail)
+    console.log(blog.writernmae)
+    const email = blog.writeremail;
+    const subject = " Congratulations! Your blog Published";
+    const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our content has verified your blog and it has met our standards so your blog has been published on our webiste https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.`;
+    sendEmail(email, subject, text);
+
     res.status(200).json({ message: "Blog published successfully" });
   } catch (error) {
     console.log("Error storing published blog:", error);
