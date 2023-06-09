@@ -221,7 +221,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
     
-    const token = jwt.sign({ userId: user._id }, process.env.YOUR_SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id , email: user.email}, process.env.YOUR_SECRET_KEY, { expiresIn: '1h' });
     // localStorage.setItem('token', token);
     res.status(200).json({ message: 'Login successful', token });
     console.log('login successful')
@@ -241,6 +241,10 @@ const verifyToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token.split(' ')[1], process.env.YOUR_SECRET_KEY);
     req.user = decoded;
+    req.user = {
+      userId: decoded.userId,
+      email: decoded.email,
+    };
     next();
   } catch (error) {
     console.error('Failed to verify token', error);
@@ -256,15 +260,92 @@ app.get('/dashboard', verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    const { name, email } = user;
-    res.status(200).json({ name, email });
+    const { name, email,bio,userimg } = user;
+    res.status(200).json({ name, email,bio,userimg });
   } catch (error) {
     console.error('Failed to retrieve user details', error);
     res.status(500).json({ error: 'Failed to retrieve user details' });
   }
 });
 
+
+app.put('/editprofile', verifyToken, async (req, res) => {
+  const userId = req.user.userId;
+  const { name, bio, userimg } = req.body;
+
+  try {
+    const user = await AuthSchemaModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (name) {
+      user.name = name;
+    }
+
+    if (bio) {
+      user.bio = bio;
+    }
+
+    if(userimg){
+      user.userimg = userimg
+    }
+
+    await user.save();
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Failed to update profile', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+app.get('/fetchprofile', verifyToken, async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const user = await AuthSchemaModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const { name, bio, userimg,email } = user;
+    res.status(200).json({ name, bio, userimg,email });
+  } catch (error) {
+    console.error('Failed to retrieve profile', error);
+    res.status(500).json({ error: 'Failed to retrieve profile' });
+  }
+});
+
+
+app.get('/myprovisionalblogs', verifyToken, async (req, res) => {
+  try {
+    const writerEmail = req.user.email;
+   
+    console.log(writerEmail)
+    const blogs = await blogs1.find({ writeremail: writerEmail });
+    // const blogs = await PublishedBlog.find({ writeremail: writerEmail });
+    res.status(200).json({ blogs });
+    console.log(blogs)
+  } catch (error) {
+    console.error('Failed to retrieve blogs', error);
+    res.status(500).json({ error: 'Failed to retrieve blogs' });
+  }
+});
+
+app.get('/mypublishedblogs', verifyToken, async (req, res) => {
+  try {
+    const writerEmail = req.user.email;
+   
+    console.log(writerEmail)
+    const blogs = await PublishedBlog.find({ writeremail: writerEmail });
+    res.status(200).json({ blogs });
+    console.log(blogs)
+  } catch (error) {
+    console.error('Failed to retrieve blogs', error);
+    res.status(500).json({ error: 'Failed to retrieve blogs' });
+  }
+});
+
 const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
-  console.log("server started.");
+  console.log(`server started at ${port}`);
 });

@@ -36,6 +36,12 @@ const Authschema = new mongoose.Schema({
     type:String,
     required:true,
     unique:true
+  },
+  bio:{
+    type:String
+  },
+  userimg:{
+    type:String
   }
 })
 
