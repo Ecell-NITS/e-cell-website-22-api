@@ -1,9 +1,17 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { UserModel, UserModel2, blogs1,PublishedBlog } = require("./Users");
+const {
+  UserModel,
+  UserModel2,
+  blogs1,
+  PublishedBlog,
+  AuthSchemaModel,
+} = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 app.use(bodyParser.json());
 const cors = require("cors");
 require("dotenv").config();
@@ -61,7 +69,6 @@ app.get("/", (req, res) => {
   res.send("<p>Welcome to ecell website api.</p>");
 });
 
-
 app.post("/check-email", (req, res) => {
   const email = req.body.email;
   UserModel.findOne({ email }, (err, user) => {
@@ -116,22 +123,22 @@ app.get("/getblogs", (req, res) => {
   });
 });
 
-app.get('/getblogs/:id', async (req, res) => {
+app.get("/getblogs/:id", async (req, res) => {
   try {
     const blogId = req.params.id;
     const blog = await blogs1.findById(blogId);
     res.json(blog);
   } catch (error) {
-    console.log('Error fetching blog:', error);
-    res.status(500).json({ error: 'Error fetching blog' });
+    console.log("Error fetching blog:", error);
+    res.status(500).json({ error: "Error fetching blog" });
   }
 });
 
 app.post("/acceptedblogs", async (req, res) => {
-  const { blogId } = req.body
+  const { blogId } = req.body;
 
   try {
-    const blog = await blogs1.findById(blogId)
+    const blog = await blogs1.findById(blogId);
     if (!blog) {
       return res.status(404).json({ error: "Blog not found" });
     }
@@ -140,8 +147,8 @@ app.post("/acceptedblogs", async (req, res) => {
     const publishedBlog = new PublishedBlog(blog.toObject());
     await publishedBlog.save();
 
-    console.log(blog.writeremail)
-    console.log(blog.writernmae)
+    console.log(blog.writeremail);
+    console.log(blog.writernmae);
     const email = blog.writeremail;
     const subject = " Congratulations! Your blog Published";
     const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our content has verified your blog and it has met our standards so your blog has been published on our webiste https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.`;
@@ -152,7 +159,7 @@ app.post("/acceptedblogs", async (req, res) => {
     console.log("Error storing published blog:", error);
     res.status(500).json({ error: "Error storing published blog" });
   }
-})
+});
 
 app.get("/acceptedblogs", (req, res) => {
   PublishedBlog.find({}, (err, result) => {
@@ -162,6 +169,99 @@ app.get("/acceptedblogs", (req, res) => {
       res.json(result);
     }
   });
+});
+
+
+
+app.post("/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "Please fill all required fields" });
+    }
+
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "Password should not be less than 8 characters" });
+    }
+
+    const existingUser = await AuthSchemaModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new AuthSchemaModel({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    await user.save();
+    res.status(200).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Failed to register user", error);
+    res.status(500).json({ error: "Failed to register user" });
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await AuthSchemaModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+    
+    const token = jwt.sign({ userId: user._id }, process.env.YOUR_SECRET_KEY, { expiresIn: '1h' });
+    // localStorage.setItem('token', token);
+    res.status(200).json({ message: 'Login successful', token });
+    console.log('login successful')
+  } catch (error) {
+    console.error('Failed to log in', error);
+    res.status(500).json({ error: 'Failed to log in' });
+  }
+});
+
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Missing token' });
+  }
+
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], process.env.YOUR_SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error('Failed to verify token', error);
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
+
+app.get('/dashboard', verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const user = await AuthSchemaModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const { name, email } = user;
+    res.status(200).json({ name, email });
+  } catch (error) {
+    console.error('Failed to retrieve user details', error);
+    res.status(500).json({ error: 'Failed to retrieve user details' });
+  }
 });
 
 const port = process.env.PORT || 2226;

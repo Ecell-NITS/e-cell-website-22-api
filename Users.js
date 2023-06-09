@@ -25,6 +25,21 @@ const UserSchema2 = new mongoose.Schema({
   },
 });
 
+const Authschema = new mongoose.Schema({
+  name:String,
+  email:{
+    type:String,
+    required:true,
+    unique:true
+  },
+  password:{
+    type:String,
+    required:true,
+    unique:true
+  }
+})
+
+
 const blogsschema = new mongoose.Schema({
   title: {
     type: String,
@@ -79,9 +94,13 @@ const UserModel = mongoose.model("newsletter", UserSchema);
 const UserModel2 = mongoose.model("query", UserSchema2);
 
 const PublishedBlog = mongoose.model("PublishedBlog", PublishedBlogSchema);
+const AuthSchemaModel = mongoose.model("signup", Authschema)
+
+
 module.exports = {
   UserModel,
   UserModel2,
   blogs1,
   PublishedBlog,
+  AuthSchemaModel
 };
