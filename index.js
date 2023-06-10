@@ -11,7 +11,7 @@ const {
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 app.use(bodyParser.json());
 const cors = require("cors");
 require("dotenv").config();
@@ -171,8 +171,6 @@ app.get("/acceptedblogs", (req, res) => {
   });
 });
 
-
-
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -207,27 +205,31 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await AuthSchemaModel.findOne({ email });
     if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
-    
-    const token = jwt.sign({ userId: user._id , email: user.email}, process.env.YOUR_SECRET_KEY, { expiresIn: '1h' });
+
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.YOUR_SECRET_KEY,
+      { expiresIn: "1h" }
+    );
     // localStorage.setItem('token', token);
-    res.status(200).json({ message: 'Login successful', token });
-    console.log('login successful')
+    res.status(200).json({ message: "Login successful", token });
+    console.log("login successful");
   } catch (error) {
-    console.error('Failed to log in', error);
-    res.status(500).json({ error: 'Failed to log in' });
+    console.error("Failed to log in", error);
+    res.status(500).json({ error: "Failed to log in" });
   }
 });
 
@@ -235,11 +237,14 @@ const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: 'Missing token' });
+    return res.status(401).json({ error: "Missing token" });
   }
 
   try {
-    const decoded = jwt.verify(token.split(' ')[1], process.env.YOUR_SECRET_KEY);
+    const decoded = jwt.verify(
+      token.split(" ")[1],
+      process.env.YOUR_SECRET_KEY
+    );
     req.user = decoded;
     req.user = {
       userId: decoded.userId,
@@ -247,36 +252,35 @@ const verifyToken = (req, res, next) => {
     };
     next();
   } catch (error) {
-    console.error('Failed to verify token', error);
-    res.status(401).json({ error: 'Invalid token' });
+    console.error("Failed to verify token", error);
+    res.status(401).json({ error: "Invalid token" });
   }
 };
 
-app.get('/dashboard', verifyToken, async (req, res) => {
+app.get("/dashboard", verifyToken, async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await AuthSchemaModel.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
-    const { name, email,bio,userimg } = user;
-    res.status(200).json({ name, email,bio,userimg });
+    const { name, email, bio, userimg } = user;
+    res.status(200).json({ name, email, bio, userimg });
   } catch (error) {
-    console.error('Failed to retrieve user details', error);
-    res.status(500).json({ error: 'Failed to retrieve user details' });
+    console.error("Failed to retrieve user details", error);
+    res.status(500).json({ error: "Failed to retrieve user details" });
   }
 });
 
-
-app.put('/editprofile', verifyToken, async (req, res) => {
+app.put("/editprofile", verifyToken, async (req, res) => {
   const userId = req.user.userId;
   const { name, bio, userimg } = req.body;
 
   try {
     const user = await AuthSchemaModel.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (name) {
@@ -287,61 +291,89 @@ app.put('/editprofile', verifyToken, async (req, res) => {
       user.bio = bio;
     }
 
-    if(userimg){
-      user.userimg = userimg
+    if (userimg) {
+      user.userimg = userimg;
     }
 
     await user.save();
-    res.status(200).json({ message: 'Profile updated successfully' });
+    res.status(200).json({ message: "Profile updated successfully" });
   } catch (error) {
-    console.error('Failed to update profile', error);
-    res.status(500).json({ error: 'Failed to update profile' });
+    console.error("Failed to update profile", error);
+    res.status(500).json({ error: "Failed to update profile" });
   }
 });
 
-app.get('/fetchprofile', verifyToken, async (req, res) => {
+app.get("/fetchprofile", verifyToken, async (req, res) => {
   const userId = req.user.userId;
 
   try {
     const user = await AuthSchemaModel.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
-    const { name, bio, userimg,email } = user;
-    res.status(200).json({ name, bio, userimg,email });
+    const { name, bio, userimg, email } = user;
+    res.status(200).json({ name, bio, userimg, email });
   } catch (error) {
-    console.error('Failed to retrieve profile', error);
-    res.status(500).json({ error: 'Failed to retrieve profile' });
+    console.error("Failed to retrieve profile", error);
+    res.status(500).json({ error: "Failed to retrieve profile" });
   }
 });
 
-
-app.get('/myprovisionalblogs', verifyToken, async (req, res) => {
+app.get("/myprovisionalblogs", verifyToken, async (req, res) => {
   try {
     const writerEmail = req.user.email;
-   
-    console.log(writerEmail)
+
+    console.log(writerEmail);
     const blogs = await blogs1.find({ writeremail: writerEmail });
     // const blogs = await PublishedBlog.find({ writeremail: writerEmail });
     res.status(200).json({ blogs });
-    console.log(blogs)
+    console.log(blogs);
   } catch (error) {
-    console.error('Failed to retrieve blogs', error);
-    res.status(500).json({ error: 'Failed to retrieve blogs' });
+    console.error("Failed to retrieve blogs", error);
+    res.status(500).json({ error: "Failed to retrieve blogs" });
   }
 });
 
-app.get('/mypublishedblogs', verifyToken, async (req, res) => {
+app.get("/mypublishedblogs", verifyToken, async (req, res) => {
   try {
     const writerEmail = req.user.email;
-   
-    console.log(writerEmail)
+
+    console.log(writerEmail);
     const blogs = await PublishedBlog.find({ writeremail: writerEmail });
     res.status(200).json({ blogs });
-    console.log(blogs)
+    console.log(blogs);
   } catch (error) {
-    console.error('Failed to retrieve blogs', error);
-    res.status(500).json({ error: 'Failed to retrieve blogs' });
+    console.error("Failed to retrieve blogs", error);
+    res.status(500).json({ error: "Failed to retrieve blogs" });
+  }
+});
+
+app.post("/api/blogs/:blogId/like", verifyToken, async (req, res) => {
+  const userId = req.user.userId;
+  const blogId = req.params.blogId;
+
+  try {
+    const blog = await PublishedBlog.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    if (blog.likes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ error: "You have already liked this blog" });
+    }
+
+    blog.likes.push(userId);
+    blog.likesCount += 1;
+
+    await blog.save();
+    console.log("blog liked");
+   
+    res.status(200).json({ likes: blog.likesCount });
+  } catch (error) {
+    console.error("Failed to update like count", error);
+    res.status(500).json({ error: "Failed to update like count" });
   }
 });
 

@@ -87,6 +87,10 @@ const blogsschema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  likes: {
+    type: [String], 
+    default: [],
+  },
   timestamp:Date
 });
 
