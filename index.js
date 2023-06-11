@@ -369,11 +369,32 @@ app.post("/api/blogs/:blogId/like", verifyToken, async (req, res) => {
 
     await blog.save();
     console.log("blog liked");
-   
+
     res.status(200).json({ likes: blog.likesCount });
   } catch (error) {
     console.error("Failed to update like count", error);
     res.status(500).json({ error: "Failed to update like count" });
+  }
+});
+
+app.get("/api/likedblogs", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    console.log(userId);
+
+    const user = await AuthSchemaModel.findById(userId);
+    // console.log(user)
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const likedBlogs = await PublishedBlog.find({ likes: userId }).exec();
+
+    console.log(likedBlogs);
+    res.status(200).json(likedBlogs);
+  } catch (error) {
+    console.error("Error fetching liked blogs:", error);
+    res.status(500).json({ error: "Failed to fetch liked blogs" });
   }
 });
 
