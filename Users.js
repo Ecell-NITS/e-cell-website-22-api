@@ -94,6 +94,11 @@ const blogsschema = new mongoose.Schema({
   timestamp:Date
 });
 
+const otpSchema = new mongoose.Schema ({
+  email: { type: String, required: true },
+  otp: { type: String, required: true },
+})
+
 const blogs1 = mongoose.model("blog", blogsschema);
 const PublishedBlogSchema = new mongoose.Schema(
   blogs1.schema.obj, 
@@ -105,12 +110,12 @@ const UserModel2 = mongoose.model("query", UserSchema2);
 
 const PublishedBlog = mongoose.model("PublishedBlog", PublishedBlogSchema);
 const AuthSchemaModel = mongoose.model("signup", Authschema)
-
+const OTPModel = mongoose.model("OTPsignup", otpSchema);
 
 module.exports = {
   UserModel,
   UserModel2,
   blogs1,
   PublishedBlog,
-  AuthSchemaModel
+  AuthSchemaModel, OTPModel
 };
