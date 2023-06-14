@@ -173,7 +173,7 @@ app.get("/acceptedblogs", (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, bio, userimg } = req.body;
 
   try {
     if (!name || !email || !password) {
@@ -195,7 +195,7 @@ app.post("/signup", async (req, res) => {
     const user = new AuthSchemaModel({
       name,
       email,
-      password: hashedPassword,
+      password: hashedPassword, bio, userimg
     });
 
     await user.save();
