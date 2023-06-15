@@ -52,11 +52,11 @@ const blogsschema = new mongoose.Schema({
     required: true,
   },
   intro: {
-    type: String,
+    type:  mongoose.Schema.Types.Mixed,
     required: true,
   },
   content: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
     required: true,
   },
   tag: {
