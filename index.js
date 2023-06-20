@@ -13,7 +13,8 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 const cors = require("cors");
 require("dotenv").config();
 app.use(express.json());
@@ -240,7 +241,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.YOUR_SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "72h" }
     );
     // localStorage.setItem('token', token);
     res.status(200).json({ message: "Login successful", token });
