@@ -7,7 +7,7 @@ const {
   blogs1,
   PublishedBlog,
   AuthSchemaModel,
-  OTPModel
+  OTPModel,
 } = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -46,24 +46,39 @@ const sendEmail = (to, subject, text) => {
   });
 };
 
-app.get("/getUsers", (req, res) => {
-  UserModel2.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
-  });
+app.post("/getUsers", (req, res) => {
+  const password = req.body.password
+  if (password === process.env.CONTACT_RESPONSES_PWD) {
+    UserModel2.find({}, (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    });
+  } else {
+    res.status(401).json({
+      message: "Unauthorized user",
+    });
+  }
 });
 
-app.get("/getnewsletters", (req, res) => {
-  UserModel.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
-  });
+app.post("/getnewsletters", (req, res) => {
+  const password = req.body.password;
+
+  if (password === process.env.NEWSLETTER_PWD) {
+    UserModel.find({}, (err, result) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(result);
+      }
+    });
+  } else {
+    res.status(401).json({
+      message: "Unauthorized user",
+    });
+  }
 });
 
 app.get("/", (req, res) => {
@@ -195,7 +210,9 @@ app.post("/signup", async (req, res) => {
     const user = new AuthSchemaModel({
       name,
       email,
-      password: hashedPassword, bio, userimg
+      password: hashedPassword,
+      bio,
+      userimg,
     });
 
     await user.save();
@@ -405,7 +422,11 @@ app.post("/send-otp", async (req, res) => {
   const otp = Math.floor(100000 + Math.random() * 900000);
 
   try {
-    sendEmail(email, "ECELL Signup OTP", `Your OTP for verifying your email id for creating account is: ${otp}`);
+    sendEmail(
+      email,
+      "ECELL Signup OTP",
+      `Your OTP for verifying your email id for creating account is: ${otp}`
+    );
 
     await OTPModel.findOneAndUpdate({ email }, { otp }, { upsert: true });
 
@@ -422,12 +443,11 @@ app.post("/verify-otp", async (req, res) => {
   const email = req.body.email;
 
   try {
-   
     const otpData = await OTPModel.findOne({ email }).exec();
 
     console.log("Entered OTP:", enteredOTP);
     console.log("Stored OTP Data:", otpData.otp);
-// console.log(req.body.email)
+    // console.log(req.body.email)
     if (otpData) {
       const storedOTP = otpData.otp.toString().trim();
       if (enteredOTP === storedOTP) {
@@ -441,8 +461,10 @@ app.post("/verify-otp", async (req, res) => {
     }
   } catch (error) {
     // console.log("Error verifying OTP:", error);
-    console.log(error)
-    res.status(500).json({ error: "An error occurred while verifying the OTP" });
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while verifying the OTP" });
   }
 });
 
