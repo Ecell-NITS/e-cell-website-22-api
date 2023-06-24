@@ -91,7 +91,16 @@ const blogsschema = new mongoose.Schema({
     type: [String], 
     default: [],
   },
-  timestamp:Date
+  timestamp:Date,
+  comments: [{
+    commentauthor: String,
+    commentpic:String,
+    text: String,
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  }],
 });
 
 const otpSchema = new mongoose.Schema ({

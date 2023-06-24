@@ -13,8 +13,8 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 const cors = require("cors");
 require("dotenv").config();
 app.use(express.json());
@@ -48,7 +48,7 @@ const sendEmail = (to, subject, text) => {
 };
 
 app.post("/getUsers", (req, res) => {
-  const password = req.body.password
+  const password = req.body.password;
   if (password === process.env.CONTACT_RESPONSES_PWD) {
     UserModel2.find({}, (err, result) => {
       if (err) {
@@ -466,6 +466,48 @@ app.post("/verify-otp", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while verifying the OTP" });
+  }
+});
+
+app.post("/api/comment/:id", verifyToken, async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const { commentauthor, text, commentpic } = req.body;
+
+    const blog = await PublishedBlog.findById(blogId);
+    // const blog = await blogs1.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    const newComment = {
+      commentauthor,
+      commentpic,
+      text,
+      createdAt: new Date(),
+    };
+
+    blog.comments.push(newComment);
+    await blog.save();
+
+    res.json(blog);
+  } catch (error) {
+    console.log("Error adding comment:", error);
+    res.status(500).json({ error: "Error adding comment" });
+  }
+});
+
+app.get("/api/comment/:postId",   async (req, res) => {
+  try {
+    const { postId } = req.params;
+    console.log(postId);
+    const comments = await PublishedBlog.find({ _id: postId });
+    // const comments = await blogs1.find({ postId });
+    console.log(comments);
+    res.json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Failed to fetch comments" });
   }
 });
 
