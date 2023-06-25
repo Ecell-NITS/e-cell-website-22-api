@@ -168,7 +168,7 @@ app.post("/acceptedblogs", async (req, res) => {
     console.log(blog.writernmae);
     const email = blog.writeremail;
     const subject = " Congratulations! Your blog Published";
-    const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our content has verified your blog and it has met our standards so your blog has been published on our webiste https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.`;
+    const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our Content team has verified your blog and it has met our standards thus your blog has been published on our webiste https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.\n\nE-Cell\nNational Institute of Technology, Silchar`;
     sendEmail(email, subject, text);
 
     res.status(200).json({ message: "Blog published successfully" });
