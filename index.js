@@ -626,6 +626,33 @@ app.put("/editblog/:blogId", verifyToken, async (req, res) => {
   }
 });
 
+app.get("/publicprofile/:writeremaill", async (req, res) => {
+  try {
+    const {writeremaill} = req.params;
+    console.log(writeremaill)
+    const user = await AuthSchemaModel.findOne({ email: writeremaill });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const { name, email, bio, userimg, facebook, github, linkedin, instagram } =
+      user;
+    res.status(200).json({
+      name,
+      email,
+      bio,
+      userimg,
+      facebook,
+      github,
+      linkedin,
+      instagram,
+    });
+  } catch (error) {
+    console.error("Failed to retrieve user details", error);
+    res.status(500).json({ error: "Failed to retrieve user details" });
+  }
+});
+
 const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
   console.log(`server started at ${port}`);
