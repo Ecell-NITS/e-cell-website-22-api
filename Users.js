@@ -42,6 +42,18 @@ const Authschema = new mongoose.Schema({
   },
   userimg:{
     type:String
+  },
+  github:{
+    type:String
+  },
+  facebook:{
+    type:String,
+  },
+  linkedin:{
+    type:String
+  },
+  instagram:{
+    type:String
   }
 })
 

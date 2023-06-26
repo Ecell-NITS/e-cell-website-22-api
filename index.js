@@ -284,8 +284,8 @@ app.get("/dashboard", verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    const { name, email, bio, userimg } = user;
-    res.status(200).json({ name, email, bio, userimg });
+    const { name, email, bio, userimg,facebook,github,linkedin,instagram } = user;
+    res.status(200).json({ name, email, bio, userimg,facebook,github,linkedin,instagram });
   } catch (error) {
     console.error("Failed to retrieve user details", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
@@ -294,7 +294,7 @@ app.get("/dashboard", verifyToken, async (req, res) => {
 
 app.put("/editprofile", verifyToken, async (req, res) => {
   const userId = req.user.userId;
-  const { name, bio, userimg } = req.body;
+  const { name, bio, userimg, github,facebook,linkedin,instagram } = req.body;
 
   try {
     const user = await AuthSchemaModel.findById(userId);
@@ -312,6 +312,22 @@ app.put("/editprofile", verifyToken, async (req, res) => {
 
     if (userimg) {
       user.userimg = userimg;
+    }
+
+    if (github) {
+      user.github = github;
+    }
+
+    if (facebook) {
+      user.facebook = facebook;
+    }
+
+    if (linkedin) {
+      user.linkedin = linkedin;
+    }
+
+    if (instagram) {
+      user.instagram = instagram;
     }
 
     await user.save();
