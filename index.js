@@ -511,6 +511,65 @@ app.get("/api/comment/:postId",   async (req, res) => {
   }
 });
 
+app.put("/editblog/:blogId", verifyToken, async (req, res) => {
+  const { blogId } = req.params;
+  console.log(blogId);
+  const { title, tag, intro, content, writernmae, writerintro, writerpic, timestamp, topicpic, writeremail } = req.body;
+
+  try {
+    const blog = await blogs1.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({ error: "blog not found" });
+    }
+
+    if (title) {
+      blog.title = title;
+    }
+
+    if (tag) {
+      blog.tag = tag;
+    }
+
+    if (intro) {
+      blog.intro = intro;
+    }
+
+    if (content) {
+      blog.content = content;
+    }
+
+    if (writernmae) {
+      blog.writernmae = writernmae;
+    }
+
+    if (writerintro) {
+      blog.writerintro = writerintro;
+    }
+
+    if (writerpic) {
+      blog.writerpic = writerpic;
+    }
+
+    if (timestamp) {
+      blog.timestamp = timestamp;
+    }
+
+    if (topicpic) {
+      blog.topicpic = topicpic;
+    }
+
+    if (writeremail) {
+      blog.writeremail = writeremail;
+    }
+
+    await blog.save();
+    res.status(200).json({ message: "Blog updated successfully" });
+  } catch (error) {
+    console.error("Failed to update Blog", error);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
 const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
   console.log(`server started at ${port}`);
