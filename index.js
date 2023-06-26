@@ -284,8 +284,20 @@ app.get("/dashboard", verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    const { name, email, bio, userimg,facebook,github,linkedin,instagram } = user;
-    res.status(200).json({ name, email, bio, userimg,facebook,github,linkedin,instagram });
+    const { name, email, bio, userimg, facebook, github, linkedin, instagram } =
+      user;
+    res
+      .status(200)
+      .json({
+        name,
+        email,
+        bio,
+        userimg,
+        facebook,
+        github,
+        linkedin,
+        instagram,
+      });
   } catch (error) {
     console.error("Failed to retrieve user details", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
@@ -294,12 +306,29 @@ app.get("/dashboard", verifyToken, async (req, res) => {
 
 app.put("/editprofile", verifyToken, async (req, res) => {
   const userId = req.user.userId;
-  const { name, bio, userimg, github,facebook,linkedin,instagram } = req.body;
+  const { name, bio, userimg, github, facebook, linkedin, instagram, newpwd,confirmnewpwd } =
+    req.body;
 
   try {
     const user = await AuthSchemaModel.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
+    }
+
+    if (newpwd !== "" && newpwd.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "New Password should not be less than 8 characters" });
+    }
+
+      if (newpwd !== confirmnewpwd) {
+        return res.status(400).json({ error: "Passwords must match" });
+      }
+
+    const newHashedPwd = await bcrypt.hash(newpwd, 10);
+
+    if (newpwd) {
+      user.password = newHashedPwd;
     }
 
     if (name) {
@@ -513,7 +542,7 @@ app.post("/api/comment/:id", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/api/comment/:postId",   async (req, res) => {
+app.get("/api/comment/:postId", async (req, res) => {
   try {
     const { postId } = req.params;
     console.log(postId);
@@ -530,7 +559,18 @@ app.get("/api/comment/:postId",   async (req, res) => {
 app.put("/editblog/:blogId", verifyToken, async (req, res) => {
   const { blogId } = req.params;
   console.log(blogId);
-  const { title, tag, intro, content, writernmae, writerintro, writerpic, timestamp, topicpic, writeremail } = req.body;
+  const {
+    title,
+    tag,
+    intro,
+    content,
+    writernmae,
+    writerintro,
+    writerpic,
+    timestamp,
+    topicpic,
+    writeremail,
+  } = req.body;
 
   try {
     const blog = await blogs1.findById(blogId);
