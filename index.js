@@ -127,6 +127,12 @@ app.post("/createblog", async (req, res) => {
   const user = req.body;
   const newUser = new blogs1(user);
   await newUser.save();
+
+  /* Sending mail to Content team member for kind verification of blog */
+  const email = ["aditya21_ug@civil.nits.ac.in", "uttirna21_ug@ece.nits.ac.in", "aditi.khataniar@gmail.com", "vivekmfp24@gmail.com", "vivekkumar21_ug@ee.nits.ac.in"];
+  const subject = "A New Blog added on E-Cell website!";
+  const text = `Dear Content Team member,\n\nA new blog has been added on the ecell offcial website. Please visit https://ecellnits.org/provisionalblog and kindly verify the blog content.\n\nUsername: dtsx\nPassword: golmol-aurargb\n\nRegards,\nTechnical Team E-Cell,\nNational Institute of Technology, Silchar.`;
+  sendEmail(email, subject, text);
   res.json(user);
 });
 
@@ -286,18 +292,16 @@ app.get("/dashboard", verifyToken, async (req, res) => {
     }
     const { name, email, bio, userimg, facebook, github, linkedin, instagram } =
       user;
-    res
-      .status(200)
-      .json({
-        name,
-        email,
-        bio,
-        userimg,
-        facebook,
-        github,
-        linkedin,
-        instagram,
-      });
+    res.status(200).json({
+      name,
+      email,
+      bio,
+      userimg,
+      facebook,
+      github,
+      linkedin,
+      instagram,
+    });
   } catch (error) {
     console.error("Failed to retrieve user details", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
@@ -306,8 +310,17 @@ app.get("/dashboard", verifyToken, async (req, res) => {
 
 app.put("/editprofile", verifyToken, async (req, res) => {
   const userId = req.user.userId;
-  const { name, bio, userimg, github, facebook, linkedin, instagram, newpwd,confirmnewpwd } =
-    req.body;
+  const {
+    name,
+    bio,
+    userimg,
+    github,
+    facebook,
+    linkedin,
+    instagram,
+    newpwd,
+    confirmnewpwd,
+  } = req.body;
 
   try {
     const user = await AuthSchemaModel.findById(userId);
@@ -321,9 +334,9 @@ app.put("/editprofile", verifyToken, async (req, res) => {
         .json({ error: "New Password should not be less than 8 characters" });
     }
 
-      if (newpwd !== confirmnewpwd) {
-        return res.status(400).json({ error: "Passwords must match" });
-      }
+    if (newpwd !== confirmnewpwd) {
+      return res.status(400).json({ error: "Passwords must match" });
+    }
 
     const newHashedPwd = await bcrypt.hash(newpwd, 10);
 
@@ -628,8 +641,8 @@ app.put("/editblog/:blogId", verifyToken, async (req, res) => {
 
 app.get("/publicprofile/:authoruniqueid", async (req, res) => {
   try {
-    const {authoruniqueid} = req.params;
-    console.log(authoruniqueid)
+    const { authoruniqueid } = req.params;
+    console.log(authoruniqueid);
     const user = await AuthSchemaModel.findById(authoruniqueid);
 
     if (!user) {
@@ -665,7 +678,17 @@ app.get("/publicwrittenblogs/:authoruniqueid", async (req, res) => {
     }
 
     const formattedBlogs = blogs.map((blog) => {
-      const { title, intro, tag, content, topicpic, writernmae, writeremail, writerintro, _id } = blog;
+      const {
+        title,
+        intro,
+        tag,
+        content,
+        topicpic,
+        writernmae,
+        writeremail,
+        writerintro,
+        _id,
+      } = blog;
       return {
         title,
         intro,
@@ -675,7 +698,7 @@ app.get("/publicwrittenblogs/:authoruniqueid", async (req, res) => {
         writernmae,
         writeremail,
         writerintro,
-        _id
+        _id,
       };
     });
 
