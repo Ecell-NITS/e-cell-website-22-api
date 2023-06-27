@@ -35,7 +35,7 @@ const Authschema = new mongoose.Schema({
   password:{
     type:String,
     required:true,
-    unique:true
+    // unique:true
   },
   bio:{
     type:String
@@ -103,6 +103,7 @@ const blogsschema = new mongoose.Schema({
     type: [String], 
     default: [],
   },
+  authorid:String,
   timestamp:Date,
   comments: [{
     commentauthor: String,

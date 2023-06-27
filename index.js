@@ -375,8 +375,8 @@ app.get("/fetchprofile", verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    const { name, bio, userimg, email } = user;
-    res.status(200).json({ name, bio, userimg, email });
+    const { name, bio, userimg, email, _id } = user;
+    res.status(200).json({ name, bio, userimg, email, _id });
   } catch (error) {
     console.error("Failed to retrieve profile", error);
     res.status(500).json({ error: "Failed to retrieve profile" });
@@ -626,11 +626,11 @@ app.put("/editblog/:blogId", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/publicprofile/:writeremaill", async (req, res) => {
+app.get("/publicprofile/:authoruniqueid", async (req, res) => {
   try {
-    const {writeremaill} = req.params;
-    console.log(writeremaill)
-    const user = await AuthSchemaModel.findOne({ email: writeremaill });
+    const {authoruniqueid} = req.params;
+    console.log(authoruniqueid)
+    const user = await AuthSchemaModel.findById(authoruniqueid);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -653,11 +653,12 @@ app.get("/publicprofile/:writeremaill", async (req, res) => {
   }
 });
 
-app.get("/publicwrittenblogs/:writeremaill", async (req, res) => {
+app.get("/publicwrittenblogs/:authoruniqueid", async (req, res) => {
   try {
-    const { writeremaill } = req.params;
-    console.log(writeremaill);
-    const blogs = await PublishedBlog.find({ writeremail: writeremaill });
+    const { authoruniqueid } = req.params;
+    console.log(authoruniqueid);
+    // const blogs = await PublishedBlog.findById(authoruniqueid);
+    const blogs = await PublishedBlog.find({ authorid: authoruniqueid });
 
     if (blogs.length === 0) {
       return res.status(404).json({ error: "No blogs found for the user" });
