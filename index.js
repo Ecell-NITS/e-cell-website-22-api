@@ -131,7 +131,7 @@ app.post("/createblog", async (req, res) => {
   /* Sending mail to Content team member for kind verification of blog */
   const email = ["aditya21_ug@civil.nits.ac.in", "uttirna21_ug@ece.nits.ac.in", "aditi.khataniar@gmail.com", "vivekmfp24@gmail.com", "vivekkumar21_ug@ee.nits.ac.in"];
   const subject = "A New Blog added on E-Cell website!";
-  const text = `Dear Content Team member,\n\nA new blog has been added on the ecell offcial website. Please visit https://ecellnits.org/provisionalblog and kindly verify the blog content.\n\nUsername: dtsx\nPassword: golmol-aurargb\n\nRegards,\nTechnical Team E-Cell,\nNational Institute of Technology, Silchar.`;
+  const text = `Dear Content Team member,\n\nA new blog has been added on the ecell offcial website. Please visit https://ecellnits.org/provisionalblog and kindly verify the blog content.\n\nUsername: dtsx\nPassword: golmol-aurargb\n\nRegards\n\n E-Cell Technical Team,\nNational Institute of Technology, Silchar.`;
   sendEmail(email, subject, text);
   res.json(user);
 });
@@ -160,6 +160,7 @@ app.get("/getblogs/:id", async (req, res) => {
 app.post("/acceptedblogs", async (req, res) => {
   const { blogId } = req.body;
 
+
   try {
     const blog = await blogs1.findById(blogId);
     if (!blog) {
@@ -170,12 +171,17 @@ app.post("/acceptedblogs", async (req, res) => {
     const publishedBlog = new PublishedBlog(blog.toObject());
     await publishedBlog.save();
 
-    console.log(blog.writeremail);
-    console.log(blog.writernmae);
+    console.log(`The blog with the title ${blog.title} from ${blog.writernmae} having email ${blog.writeremail} has been published.`)
+
     const email = blog.writeremail;
-    const subject = " Congratulations! Your blog Published";
-    const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our Content team has verified your blog and it has met our standards thus your blog has been published on our webiste https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.\n\nE-Cell\nNational Institute of Technology, Silchar`;
+    const subject = " Congratulations! Your blog Published!";
+    const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our Content team has verified your blog and it has met our standards thus your blog has been published on our website https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.\n\nRegards\n\nE-Cell,\nNational Institute of Technology, Silchar`;
     sendEmail(email, subject, text);
+
+    const email0 = ["aditya21_ug@civil.nits.ac.in", "uttirna21_ug@ece.nits.ac.in", "aditi.khataniar@gmail.com", "vivekmfp24@gmail.com", "vivekkumar21_ug@ee.nits.ac.in"];
+    const subject0 = "A blog reviewed and published!";
+    const text0 = `Dear Content Team Head, Co-head & Executive Head,\n\n The blog with the title "${blog.title}" from "${blog.writernmae}" having email ${blog.writeremail} has been reviewed by a member of blog verifying team and thus has been published on https://ecellnits.org/resources\n\nRegards\n\nE-Cell Technical Team,\nNational Institute of Technology, Silchar`;
+    sendEmail(email0, subject0, text0);
 
     res.status(200).json({ message: "Blog published successfully" });
   } catch (error) {
