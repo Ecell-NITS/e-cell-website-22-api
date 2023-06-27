@@ -653,6 +653,38 @@ app.get("/publicprofile/:writeremaill", async (req, res) => {
   }
 });
 
+app.get("/publicwrittenblogs/:writeremaill", async (req, res) => {
+  try {
+    const { writeremaill } = req.params;
+    console.log(writeremaill);
+    const blogs = await PublishedBlog.find({ writeremail: writeremaill });
+
+    if (blogs.length === 0) {
+      return res.status(404).json({ error: "No blogs found for the user" });
+    }
+
+    const formattedBlogs = blogs.map((blog) => {
+      const { title, intro, tag, content, topicpic, writernmae, writeremail, writerintro, _id } = blog;
+      return {
+        title,
+        intro,
+        tag,
+        content,
+        topicpic,
+        writernmae,
+        writeremail,
+        writerintro,
+        _id
+      };
+    });
+
+    res.status(200).json(formattedBlogs);
+  } catch (error) {
+    console.error("Failed to retrieve user details", error);
+    res.status(500).json({ error: "Failed to retrieve user details" });
+  }
+});
+
 const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
   console.log(`server started at ${port}`);
