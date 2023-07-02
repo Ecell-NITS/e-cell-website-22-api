@@ -8,6 +8,7 @@ const {
   PublishedBlog,
   AuthSchemaModel,
   OTPModel,
+  OTPresetpwdModel,
 } = require("./Users");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -129,7 +130,13 @@ app.post("/createblog", async (req, res) => {
   await newUser.save();
 
   /* Sending mail to Content team member for kind verification of blog */
-  const email = ["aditya21_ug@civil.nits.ac.in", "uttirna21_ug@ece.nits.ac.in", "aditi.khataniar@gmail.com", "vivekmfp24@gmail.com", "vivekkumar21_ug@ee.nits.ac.in"];
+  const email = [
+    "aditya21_ug@civil.nits.ac.in",
+    "uttirna21_ug@ece.nits.ac.in",
+    "aditi.khataniar@gmail.com",
+    "vivekmfp24@gmail.com",
+    "vivekkumar21_ug@ee.nits.ac.in",
+  ];
   const subject = "A New Blog added on E-Cell website!";
   const text = `Dear Content Team member,\n\nA new blog has been added on the ecell offcial website. Please visit https://ecellnits.org/provisionalblog and kindly verify the blog content.\n\nUsername: dtsx\nPassword: golmol-aurargb\n\nRegards\n\n E-Cell Technical Team,\nNational Institute of Technology, Silchar.`;
   sendEmail(email, subject, text);
@@ -160,7 +167,6 @@ app.get("/getblogs/:id", async (req, res) => {
 app.post("/acceptedblogs", async (req, res) => {
   const { blogId } = req.body;
 
-
   try {
     const blog = await blogs1.findById(blogId);
     if (!blog) {
@@ -171,14 +177,22 @@ app.post("/acceptedblogs", async (req, res) => {
     const publishedBlog = new PublishedBlog(blog.toObject());
     await publishedBlog.save();
 
-    console.log(`The blog with the title ${blog.title} from ${blog.writernmae} having email ${blog.writeremail} has been published.`)
+    console.log(
+      `The blog with the title ${blog.title} from ${blog.writernmae} having email ${blog.writeremail} has been published.`
+    );
 
     const email = blog.writeremail;
     const subject = " Congratulations! Your blog Published!";
     const text = `Dear ${blog.writernmae},\n\n We feel immense pleasure to tell you that our Content team has verified your blog and it has met our standards thus your blog has been published on our website https://ecellnits.org \n\n Keep writing blogs and inspiring the mass.\n\nRegards\n\nE-Cell,\nNational Institute of Technology, Silchar`;
     sendEmail(email, subject, text);
 
-    const email0 = ["aditya21_ug@civil.nits.ac.in", "uttirna21_ug@ece.nits.ac.in", "aditi.khataniar@gmail.com", "vivekmfp24@gmail.com", "vivekkumar21_ug@ee.nits.ac.in"];
+    const email0 = [
+      "aditya21_ug@civil.nits.ac.in",
+      "uttirna21_ug@ece.nits.ac.in",
+      "aditi.khataniar@gmail.com",
+      "vivekmfp24@gmail.com",
+      "vivekkumar21_ug@ee.nits.ac.in",
+    ];
     const subject0 = "A blog reviewed and published!";
     const text0 = `Dear Content Team Head, Co-head & Executive Head,\n\n The blog with the title "${blog.title}" from "${blog.writernmae}" having email ${blog.writeremail} has been reviewed by a member of blog verifying team and thus has been published on https://ecellnits.org/resources\n\nRegards\n\nE-Cell Technical Team,\nNational Institute of Technology, Silchar`;
     sendEmail(email0, subject0, text0);
@@ -712,6 +726,108 @@ app.get("/publicwrittenblogs/:authoruniqueid", async (req, res) => {
   } catch (error) {
     console.error("Failed to retrieve user details", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
+  }
+});
+
+app.post("/forgotpwd", async (req, res) => {
+  const { email } = req.body;
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  const existingUser = await AuthSchemaModel.findOne({ email });
+  if (!existingUser) {
+    return res.status(400).json({ error: "No account with this email found." });
+  }
+
+  try {
+    sendEmail(
+      email,
+      "[OTP] ECELL OTP",
+      `Your OTP for verifying your email id for resetting password is: ${otp}`
+    );
+
+    await OTPresetpwdModel.findOneAndUpdate(
+      { email },
+      { otp },
+      { upsert: true }
+    );
+
+    res.json({ success: true, otp: otp.toString(), email });
+  } catch (error) {
+    console.log("Error sending OTP:", error);
+    res.status(500).json({ error: "An error occurred while sending the OTP" });
+  }
+});
+
+app.post("/verifyotpresetpwd", async (req, res) => {
+  console.log("Request Body:", req.body);
+  const enteredOTP = req.body.otp.toString().trim();
+  const { email } = req.body;
+  try {
+    const otpData = await OTPresetpwdModel.findOne({ email }).exec();
+
+    console.log("Entered OTP:", enteredOTP);
+    console.log("Stored OTP Data:", otpData.otp);
+    console.log(req.body.email);
+    if (otpData) {
+      const storedOTP = otpData.otp.toString().trim();
+      if (enteredOTP === storedOTP) {
+        res.status(200).json({ message: "OTP verified successfully" });
+      } else {
+        res.status(400).json({ message: "Wrong OTP. Please try again" });
+      }
+    } else {
+      res.status(400).json({ message: "No OTP found for the provided email" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while verifying the OTP" });
+  }
+});
+
+app.put("/changingpwd", async (req, res) => {
+  const { email, newpwd0, confirmnewpwd0 } = req.body;
+
+  try {
+    const user = await AuthSchemaModel.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (newpwd0 === "") {
+      return res.status(400).json({ error: "Password can't be empty." });
+    }
+
+    if (newpwd0 !== "" && newpwd0.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "New Password should not be less than 8 characters" });
+    }
+
+    if (newpwd0 !== confirmnewpwd0) {
+      return res.status(400).json({ error: "Passwords must match" });
+    }
+
+    const newHashedPwd = await bcrypt.hash(newpwd0, 10);
+
+    if (newpwd0) {
+      user.password = newHashedPwd;
+    }
+
+    await user.save();
+    res.status(200).json({ message: "Password recovered successfully" });
+
+    const email12 = email;
+    const subject = "[Security Alert] ECELL NITS";
+    const text = `Dear ${email},\n\nPassword of your e-cell nits account was recently changed. If you don't recognize this activity, your account might be at risk so, please contact E-Cell NITS immediately.\n\nRegards,\n\nE-Cell,\nNational Institute of Technology, Silchar.`;
+    sendEmail(email12, subject, text);
+
+  } catch (error) {
+    console.error("Failed to change password", error);
+    res.status(500).json({ error: "Failed to change password" });
   }
 });
 
