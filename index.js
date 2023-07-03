@@ -835,7 +835,8 @@ app.get("/tagspecificbloglist/:tagname", async(req, res) => {
   try{
   const {tagname} = req.params;
   console.log(tagname);
-  const blogs = await PublishedBlog.find({ tag: { $regex: tagname, $options: 'i' } });
+  const blogs = await PublishedBlog.find({ tag: { $regex: '\\b' + tagname + '\\b', $options: 'i' } });
+
 
   if (blogs.length === 0) {
     return res.status(404).json({ error: "No blogs found with this tag." });
