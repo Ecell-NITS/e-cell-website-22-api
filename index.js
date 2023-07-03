@@ -831,6 +831,48 @@ app.put("/changingpwd", async (req, res) => {
   }
 });
 
+app.get("/tagspecificbloglist/:tagname", async(req, res) => {
+  try{
+  const {tagname} = req.params;
+  console.log(tagname);
+  const blogs = await PublishedBlog.find({ tag: { $regex: tagname, $options: 'i' } });
+
+  if (blogs.length === 0) {
+    return res.status(404).json({ error: "No blogs found with this tag." });
+  }
+
+  const totalBlogs = blogs.map((blog) => {
+    const {
+      title,
+      intro,
+      tag,
+      content,
+      topicpic,
+      writernmae,
+      writeremail,
+      writerintro,
+      _id,
+    } = blog;
+    return {
+      title,
+      intro,
+      tag,
+      content,
+      topicpic,
+      writernmae,
+      writeremail,
+      writerintro,
+      _id,
+    };
+  });
+
+  res.status(200).json(totalBlogs);
+  }catch(error){
+    console.error("Failed to retrieve ag specific blogs.", error);
+    res.status(500).json({ error: "Failed to retrieve ag specific blogs." });
+  }
+});
+
 const port = process.env.PORT || 2226;
 app.listen(port, "0.0.0.0", () => {
   console.log(`server started at ${port}`);
