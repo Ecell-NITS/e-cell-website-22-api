@@ -44,15 +44,7 @@ To run this project, you will need to add the following environment variables to
 
 `add route` 
 
- 
-
-```http   
-
-  POST /add 
-
-``` 
-
- 
+ POST /add 
 
 **Description:** Add new event 
 
@@ -71,22 +63,14 @@ To run this project, you will need to add the following environment variables to
  
 
 `fetch route` 
-
  
-
-```http   
-
-  GET /fetch 
-
-``` 
-
- 
+GET /fetch 
 
 **Description:** Allows users to fetch all events stored in the system 
 
  
 
-<!-- | Parameter | Type     | Description                | 
+<!-- | Parameter | Type  | Description | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -98,21 +82,13 @@ To run this project, you will need to add the following environment variables to
 
 `dashboard route` 
 
- 
-
-```http   
-
-  GET /dashboard 
-
-``` 
-
- 
+ GET /dashboard 
 
 **Description:** Fetch details of the user 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -136,19 +112,9 @@ To run this project, you will need to add the following environment variables to
 
 `fetchProfile route` 
 
- 
-
-```http   
-
-  GET /fetchProfile 
-
-``` 
-
- 
+ GET /fetchProfile 
 
 **Description:** Fetch details like name, bio, userimg, email_id of a user 
-
- 
 
 | Parameter | Type     | Description                | 
 
@@ -163,24 +129,15 @@ To run this project, you will need to add the following environment variables to
 | `userimg` | `string` | **Required**. user image for dashboard | 
 
  
-
 `editProfile route` 
 
- 
-
-```http   
-
-  PUT /editProfile 
-
-``` 
-
- 
+ PUT /editProfile 
 
 **Description:** Edit the profile of a user 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -196,69 +153,42 @@ To run this project, you will need to add the following environment variables to
 
 `forgotPwd route` 
 
- 
-
-```http   
-
-  POST /forgotPwd 
-
-``` 
-
- 
+POST /forgotPwd 
 
 **Description:** Take email and send otp to reset the password 
 
- 
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
 | `email` | `string` | **Required**. Email for account creation | 
 
- 
 
 `verifyOtpResetPwd route` 
 
- 
-
-```http   
-
-  POST /verifyOtpResetPwd 
-
-``` 
-
- 
+ POST /verifyOtpResetPwd 
 
 **Description:** Verify the otp send to user 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type  | Description                   | 
 
 | :-------- | :------- | :------------------------- | 
 
-| `otp` | `string` | **Required**. one time password  | 
+| `otp` | `string` | **Required**. one time password | 
 
  
 
 `changingPwd route` 
-
- 
-
-```http   
-
-  PUT /changingPwd 
-
-``` 
-
- 
+ PUT /changingPwd 
 
 **Description:** Allow users to reset/ change their password 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -272,21 +202,13 @@ To run this project, you will need to add the following environment variables to
 
 `deleteAccount route` 
 
- 
-
-```http   
-
-  POST /deleteAccount 
-
-``` 
-
- 
+POST /deleteAccount 
 
 **Description:** Flag the account for deletion. Once flagged, the user cannot log in anymore. 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -294,23 +216,10 @@ To run this project, you will need to add the following environment variables to
 
 | `user` | `string` | **Required**. Required user name | 
 
- 
-
 `publicProfile route` 
-
- 
-
-```http   
-
-  GET /publicProfile 
-
-``` 
-
- 
+GET /publicProfile 
 
 **Description:** Fetches the public profile of a user using their unique identifier 
-
- 
 
 | Parameter | Type     | Description                | 
 
@@ -335,46 +244,26 @@ To run this project, you will need to add the following environment variables to
  
 
 `getUser route` 
-
  
-
-```http   
-
-  POST /getUser 
-
-``` 
-
- 
+ POST /getUser 
 
 **Description:** Admin-only route to fetch all users. 
 
- 
-
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
-| `listOfUsers` | `string` | **Required**. Enter list of users  | 
+| `listOfUsers` | `string` | **Required**. Enter list of users | 
 
  
 
 `getNewSletters route` 
 
- 
-
-```http   
-
-  POST /getNewSletters 
-
-``` 
-
- 
+POST /getNewSletters 
 
 **Description:** Admin-only route to get all newsletter subscriptions 
 
- 
-
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -383,22 +272,11 @@ To run this project, you will need to add the following environment variables to
  
 
 `createUser route` 
-
- 
-
-```http   
-
-  POST /createUser 
-
-``` 
-
- 
+ POST /createUser 
 
 **Description:** route to create new user 
 
- 
-
-| Parameter | Type     | Description                | 
+| Parameter | Type      | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -410,23 +288,13 @@ To run this project, you will need to add the following environment variables to
 
  
 
-`sendQuery route` 
-
- 
-
-```http   
-
-  POST /sendQuery 
-
-``` 
-
- 
+`sendQuery route`  
+ POST /sendQuery 
 
 **Description:** route to contact us 
 
- 
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -439,70 +307,42 @@ To run this project, you will need to add the following environment variables to
  
 
 `getQueries route` 
-
- 
-
-```http   
-
-  GET /getQueries 
-
-``` 
-
- 
+ GET /getQueries 
 
 **Description:** route for the query 
 
- 
-
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
-| `Id` | `string` | **Required**. Enter  id | 
+| `Id` | `string` | **Required**. Enter id | 
 
  
 
-`getQueries:id route` 
+`getQueries:id route`  
 
- 
-
-```http   
-
-  GET /getQueries:id 
-
-``` 
-
- 
+ GET /getQueries:id 
 
 **Description:** route for the query id 
 
  
-
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
-| `Id` | `string` | **Required**. Enter  id | 
+| `Id` | `string` | **Required**. Enter id | 
 
  
 
 `query-read:id route` 
 
- 
-
-```http   
-
-  GET /query-read:id 
-
-``` 
-
- 
+ GET /query-read:id 
 
 **Description:** route for the query-read  
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -510,23 +350,15 @@ To run this project, you will need to add the following environment variables to
 
  
 
-`deletequery route` 
+`deletequery route`  
 
- 
-
-```http   
-
-  DELETE /deletequery 
-
-``` 
-
- 
+ DELETE /deletequery 
 
 **Description:** route for the deletequeryquery 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -534,23 +366,14 @@ To run this project, you will need to add the following environment variables to
 
  
 
-`checkEmail route` 
-
- 
-
-```http   
-
-  POST /checkEmail 
-
-``` 
-
- 
+`checkEmail route`  
+ POST /checkEmail 
 
 **Description:** route to check email 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -560,21 +383,14 @@ To run this project, you will need to add the following environment variables to
 
 `send-otp route` 
 
- 
 
-```http   
-
-  POST /send-otp 
-
-``` 
-
- 
+POST /send-otp 
 
 **Description:** route to send-otp 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -584,23 +400,15 @@ To run this project, you will need to add the following environment variables to
 
  
 
-`verify-otp route` 
+`verify-otp route`  
 
- 
-
-```http   
-
-  POST /verify-otp 
-
-``` 
-
- 
+POST /verify-otp 
 
 **Description:** route to verify otp 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type      | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -609,22 +417,13 @@ To run this project, you will need to add the following environment variables to
  
 
 `getblogs route` 
-
- 
-
-```http   
-
-  GET /getblogs 
-
-``` 
-
- 
+ GET /getblogs 
 
 **Description:** Get blogs details 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type      | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -652,21 +451,13 @@ To run this project, you will need to add the following environment variables to
 
 `getblogs:Id route` 
 
- 
-
-```http   
-
-  GET /getblogs:Id 
-
-``` 
-
- 
+ GET /getblogs:Id 
 
 **Description:** Get blog Id 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -675,20 +466,12 @@ To run this project, you will need to add the following environment variables to
  
 
 `acceptedBlogs route` 
+ GET /acceptedBlogs 
 
- 
-
-```http   
-
-  GET /acceptedBlogs 
-
-``` 
-
- 
 
 **Description:** Accepted blogs 
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -700,21 +483,14 @@ To run this project, you will need to add the following environment variables to
 
 `publishBlog:Id route` 
 
- 
 
-```http  
-
-  POST /publishBlog:Id 
-
-``` 
-
- 
+POST /publishBlog:Id 
 
 **Description:** Get blogs details 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -732,21 +508,14 @@ To run this project, you will need to add the following environment variables to
 
 `deleteBlog:Id route` 
 
- 
 
-```http  
-
-  DELETE /deleteBlog:Id 
-
-``` 
-
- 
+ DELETE /deleteBlog:Id 
 
 **Description:** Delete blog 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -760,21 +529,14 @@ To run this project, you will need to add the following environment variables to
 
 `editBlog:blogId route` 
 
- 
 
-```http  
-
-  PUT /editBlog:blogId 
-
-``` 
-
- 
+PUT /editBlog:blogId 
 
 **Description:** edit blog 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -804,21 +566,14 @@ To run this project, you will need to add the following environment variables to
 
 `createBlog route` 
 
- 
 
-```http  
-
-  POST /createBlog  
-
-``` 
-
- 
+POST /createBlog  
 
 **Description:** Create blog 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -832,21 +587,13 @@ To run this project, you will need to add the following environment variables to
 
 `myPublishedBlogs route` 
 
+GET /myPublishedBlogs  
  
-
-```http  
-
-  GET /myPublishedBlogs  
-
-``` 
-
- 
-
 **Description:** Create blog 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -856,21 +603,13 @@ To run this project, you will need to add the following environment variables to
 
 `publicWrittenBlog:authoruniqueid route` 
 
- 
-
-```http  
-
-  GET /publicWrittenBlog:authoruniqueid  
-
-``` 
-
- 
+ GET /publicWrittenBlog:authoruniqueid  
 
 **Description:** public written blog 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type      | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -900,21 +639,13 @@ To run this project, you will need to add the following environment variables to
 
 `tagSpecificBlogList:tagName route` 
 
- 
-
-```http  
-
-  GET /tagSpecificBlogList:tagName 
-
-``` 
-
- 
+ GET /tagSpecificBlogList:tagName 
 
 **Description:** tag tagSpecific BlogList 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type    | Description                   | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -944,21 +675,13 @@ To run this project, you will need to add the following environment variables to
 
 `apiBlogs:blogId route` 
 
- 
-
-```http   
-
-  POST /apiBlogs:blogId 
-
-``` 
-
- 
+ POST /apiBlogs:blogId 
 
 **Description:**api blogs 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type      | Description               | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -984,31 +707,18 @@ To run this project, you will need to add the following environment variables to
 
 `apiComment:postId route` 
 
- 
-
-```http   
-
-  GET /apiComment:postId 
-
-``` 
-
- 
+ GET /apiComment:postId 
 
 `apicomment:Id route` 
 
- 
 
-```http   
-
-  POST /apicomment:Id 
-
-``` 
+ POST /apicomment:Id 
 
 **Description:** api comment  
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -1022,21 +732,13 @@ To run this project, you will need to add the following environment variables to
 
  
 
-`allAccounts route` 
+`allAccounts route`  
 
- 
-
-```http   
-
-  GET /allAccounts 
-
-``` 
+GET /allAccounts  
 
 **Description:** all accounts 
 
- 
-
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -1063,20 +765,13 @@ To run this project, you will need to add the following environment variables to
  
 
 `makeadmin:email route` 
-
- 
-
-```http   
-
-  GET /makeadmin:email 
-
-``` 
+ GET /makeadmin:email 
 
 **Description:** make admin email 
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type     | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
@@ -1086,19 +781,14 @@ To run this project, you will need to add the following environment variables to
 
 ``makeclient:email route` 
 
- 
+ GET /makeclient:email 
 
-```http   
-
-  GET /`makeclient:email 
-
-``` 
 
 **Description:** make client  
 
  
 
-| Parameter | Type     | Description                | 
+| Parameter | Type  | Description                | 
 
 | :-------- | :------- | :------------------------- | 
 
