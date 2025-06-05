@@ -58,11 +58,12 @@ const acceptedBlogsPost = async (req, res) => {
     sendEmail.sendEmail(email, subject, text);
 
     const email0 = [
-      "aditya21_ug@civil.nits.ac.in",
-      "uttirna21_ug@ece.nits.ac.in",
-      "aditi.khataniar@gmail.com",
-      "vivekmfp24@gmail.com",
-      "vivekkumar21_ug@ee.nits.ac.in",
+      "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
+      "mimansa1312@gmail.com",
+      "ujjwalsaxena2004@gmail.com",
+      "samridhi_ug_23@ee.nits.ac.in",
+      "dasbishal1717@gmail.com",
     ];
     const subject0 = "A blog reviewed and published!";
     const text0 = `Dear Content Team Head, Co-head & Executive Head,\n\n The blog with the title "${blog.title}" from "${blog.writernmae}" having email ${blog.writeremail} has been reviewed by a member of blog verifying team and thus has been published on https://ecellnits.org/resources\n\nRegards\n\nE-Cell Technical Team,\nNational Institute of Technology, Silchar`;
@@ -168,11 +169,12 @@ const publishBlogs = async (req, res) => {
     sendEmail.sendEmail(email, subject, text);
 
     const email0 = [
-      "aditya21_ug@civil.nits.ac.in",
-      "uttirna21_ug@ece.nits.ac.in",
-      "aditi.khataniar@gmail.com",
-      "vivekmfp24@gmail.com",
-      "vivekkumar21_ug@ee.nits.ac.in",
+      "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
+      "mimansa1312@gmail.com",
+      "ujjwalsaxena2004@gmail.com",
+      "samridhi_ug_23@ee.nits.ac.in",
+      "dasbishal1717@gmail.com",
     ];
     const subject0 = "A blog reviewed and published!";
     const text0 = `Dear Content Team Head, Co-head & Executive Head,\n\n The blog with the title "${blog.title}" from "${blog.writernmae}" having email ${blog.writeremail} has been reviewed by a member of blog verifying team and thus has been published on https://ecellnits.org/resources\n\nRegards\n\nE-Cell Technical Team,\nNational Institute of Technology, Silchar`;
@@ -205,11 +207,12 @@ const deleteBlogs = async (req, res) => {
     sendEmail.sendEmail(email, subject, text);
 
     const email0 = [
-      "aditya21_ug@civil.nits.ac.in",
-      "uttirna21_ug@ece.nits.ac.in",
-      "aditi.khataniar@gmail.com",
-      "vivekmfp24@gmail.com",
-      "vivekkumar21_ug@ee.nits.ac.in",
+      "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
+      "mimansa1312@gmail.com",
+      "ujjwalsaxena2004@gmail.com",
+      "samridhi_ug_23@ee.nits.ac.in",
+      "dasbishal1717@gmail.com",
     ];
     const subject0 = "A blog reviewed and published!";
     const text0 = `Dear Content Team Head, Co-head & Executive Head,\n\n The blog with the title "${blog.title}" from "${blog.writernmae}" having email ${blog.writeremail} has been reviewed by a member of blog verifying team and thus has been deleted\n\nRegards\n\nE-Cell Technical Team,\nNational Institute of Technology, Silchar`;
