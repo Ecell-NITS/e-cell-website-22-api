@@ -60,6 +60,7 @@ const sendQuery = async (req, res) => {
   sendEmail.sendEmail(email, subject, text);
   const adminMail={
     email:[
+      "dasbishal1717@gmail.com",
       "shreyaagarwala1988@gmail.com",
       "mimansa1312@gmail.com",
       "ujjwalsaxena2004@gmail.com",

@@ -13,6 +13,7 @@ const createBlog = async (req, res) => {
       /* Sending mail to Content team member for kind verification of blog */
       const email = [
         "samridhi_ug_23@ee.nits.ac.in",
+        "Khushiprasad49@gmail.com",
         "dasbishal1717@gmail.com",
       ];
       const subject = "A New Blog added on E-Cell website!";

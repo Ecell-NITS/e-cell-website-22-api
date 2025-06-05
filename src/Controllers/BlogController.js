@@ -59,6 +59,7 @@ const acceptedBlogsPost = async (req, res) => {
 
     const email0 = [
       "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
       "mimansa1312@gmail.com",
       "ujjwalsaxena2004@gmail.com",
       "samridhi_ug_23@ee.nits.ac.in",
@@ -169,6 +170,7 @@ const publishBlogs = async (req, res) => {
 
     const email0 = [
       "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
       "mimansa1312@gmail.com",
       "ujjwalsaxena2004@gmail.com",
       "samridhi_ug_23@ee.nits.ac.in",
@@ -206,6 +208,7 @@ const deleteBlogs = async (req, res) => {
 
     const email0 = [
       "shreyaagarwala1988@gmail.com",
+      "Khushiprasad49@gmail.com",
       "mimansa1312@gmail.com",
       "ujjwalsaxena2004@gmail.com",
       "samridhi_ug_23@ee.nits.ac.in",
