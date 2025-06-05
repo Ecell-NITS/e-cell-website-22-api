@@ -60,9 +60,9 @@ const sendQuery = async (req, res) => {
   sendEmail.sendEmail(email, subject, text);
   const adminMail={
     email:[
-      "sahin0945@gmail.com",
-      "aditya21_ug@civil.nits.ac.in",
-      "arpitdhankani@gmail.com"
+      "shreyaagarwala1988@gmail.com",
+      "mimansa1312@gmail.com",
+      "ujjwalsaxena2004@gmail.com",
     ],
     subject:`New Query from ${user.name}`,
     text:`${user.name} has sent a query through the website. Read the full query at https://ecellnits.org/admin/messages \n\nContact them at ${user.email}`
