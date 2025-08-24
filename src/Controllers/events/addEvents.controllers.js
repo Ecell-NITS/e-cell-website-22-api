@@ -1,28 +1,50 @@
-const { ApiError, ApiResponse } = require("../../Utils/ApiError.js");
 const { asyncHandler } = require("../../Utils/asyncHandler.js");
 const { Events } = require("../../Models/Events.models.js")
 
 const addEvents = asyncHandler(async (req, res, next) => {
 
-   try {
-    const { moduleName, organizers, eventName, venue, eventDetails } = req.body;
+   if (req.method !== "POST") {
+       return res.status(405).json({
+           error: "Method not allowed"
+       });
+   }
 
-    if (!moduleName || !organizers || !eventName || !venue || !eventDetails) {
-        throw new ApiError(400, "All fields are required.");
+   try {
+    const { moduleName, eventName, eventDate, eventPoster, organizers, venue, eventDetails, questions } = req.body;
+
+    if (!moduleName || !eventDate || !eventPoster || !organizers || !eventName || !venue || !eventDetails) {
+        return res.status(400).json({
+            error: "All fields are required."
+        });
+
+    }
+
+    if (questions) {
+        if (!Array.isArray(questions)) {
+       return res.status(400).json({
+           error: "Questions must be an array and cannot be empty."
+       });
+   }
     }
 
     const existedEvent = await Events.findOne({ eventName });
 
     if(existedEvent){
-        throw new ApiError(409, "Event already registered!")
+        return res.status(409).json({
+            error: "Event already registered!"
+        });
     }
 
     const newEvent = await Events.create({
         moduleName,
+        eventDate,
+        eventPoster,
         organizers,
         eventName,
         venue,
-        eventDetails
+        eventDetails,
+        //question is optional
+        questions
     })
 
     return res.status(201).json(
@@ -54,5 +76,5 @@ const allEvents = asyncHandler(async (req, res) => {
 
 module.exports = {
     addEvents,
-    allEvents
+    allEvents,
 };

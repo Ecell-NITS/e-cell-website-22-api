@@ -11,9 +11,16 @@ const eventsSchema = new mongoose.Schema({
         required: true,
         index: true
     },
-    organizers: {
+    eventDate: {
         type: String,
         required: true,
+    },
+    eventPoster: {
+        type: String,
+        required: true,
+    },
+    organizers: {
+        type: String,
     },
     venue: {
         type: String,
@@ -23,6 +30,11 @@ const eventsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    //questions are optional
+    questions: {
+        type: [String],
+        default: [],
+    }
 }, { timestamps: true }
 )
 
