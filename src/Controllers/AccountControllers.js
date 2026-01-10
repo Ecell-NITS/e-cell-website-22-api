@@ -273,6 +273,7 @@ const forgotPwd = async (req, res) => {
 
   const Email = email.toString().toLowerCase().trim();
   const otp = Math.floor(100000 + Math.random() * 900000);
+  console.log(`🔐 OTP for ${Email}: ${otp}`);
 
   const existingUser = await AuthSchemaModel.findOne({ email: Email });
   if (!existingUser) {
@@ -491,12 +492,10 @@ const makeAdmin = async (req, res) => {
       res.status(200).json({ message: "User is now an admin" });
     } catch (e) {
       console.error(e);
-        return res
-          .status(500)
-          .json({ error: "something went wrong on the server" });
+      return res
+        .status(500)
+        .json({ error: "something went wrong on the server" });
     }
-    
-    
   });
 };
 
@@ -529,12 +528,10 @@ const makeClient = async (req, res) => {
       res.status(200).json({ message: "User is now an client" });
     } catch (e) {
       console.error(e);
-        return res
-          .status(500)
-          .json({ error: "something went wrong on the server" });
+      return res
+        .status(500)
+        .json({ error: "something went wrong on the server" });
     }
-    
-    
   });
 };
 
@@ -551,6 +548,6 @@ module.exports = {
   deleteAccount,
   getAllAccounts,
   makeAdmin,
-  makeClient
+  makeClient,
 };
 // accountController.js

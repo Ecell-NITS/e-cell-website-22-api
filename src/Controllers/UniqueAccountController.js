@@ -1,9 +1,6 @@
-const {
-  UserModel,
-  OTPModel,
-} = require("../Models/UserModel");
+const { UserModel, OTPModel } = require("../Models/UserModel");
 
-const sendEmail = require("../Utils/Email/EmailService")
+const sendEmail = require("../Utils/Email/EmailService");
 
 const checkEmail = (req, res) => {
   const email = req.body.email;
@@ -25,6 +22,7 @@ const sendOtp = async (req, res) => {
   email = email?.toString().toLowerCase().trim();
 
   const otp = Math.floor(100000 + Math.random() * 900000);
+  console.log(`🔐 Signup OTP for ${email}: ${otp}`);
 
   try {
     sendEmail.sendEmail(
@@ -46,7 +44,7 @@ const verifyOtp = async (req, res) => {
   // console.log("Request Body:", req.body);
   const enteredOTP = req.body.otp?.toString().trim();
 
-  let {email} = req.body
+  let { email } = req.body;
   email = email?.toString().toLowerCase().trim();
 
   try {
@@ -74,11 +72,6 @@ const verifyOtp = async (req, res) => {
       .json({ error: "An error occurred while verifying the OTP" });
   }
 };
-
-
-
-
-
 
 module.exports = {
   checkEmail,
